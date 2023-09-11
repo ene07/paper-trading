@@ -25,5 +25,9 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "web3": "^1.7.5"
+  },
+  "engines": {
+    "node": "^16 "
   }
+
 }
