@@ -20,14 +20,19 @@ exports.signUp = async (req, res, next) => {
             id:user.uid,
             username: req.body.username,
             email: req.body.email,
+            passwordHash:signInCred.password
           }
         const data=await db.collection("users").doc(user.uid).set(userData)
         const userRef = db.collection('users').doc(user?.uid);
          const doc = await userRef.get();
 
-        res.status(200).json({
+         res.status(200).json({
             status: 'success',
-            data:doc?.data()
+            data:{
+               id: doc?.id,
+               email:doc?.data()?.email,
+               username:doc?.data()?.username
+              }
         });
 
 
@@ -50,15 +55,27 @@ exports.login = async (req, res, next) => {
       try{
         if (email && password) {
             const db=admin.firestore();
-            // Find User From Database
+            // Find User From Databas
             const user = await admin.auth().getUserByEmail(email)
-            console.log(user)
+            console.log(user,"userrr")
             const userRef = db.collection('users').doc(user?.uid);
             const doc = await userRef.get();
+
+            if (!doc?.data() || !(await bcrypt.compare(doc?.data()?.passwordHash,password))) {
+                res.status(401).json({
+                    status: 'failed',
+                    error:('Email or Password is incorrect')
+                });
+
+            }
    
             res.status(200).json({
                 status: 'success',
-                data:doc?.data()
+                data:{
+                   id: doc?.id,
+                   email:doc?.data()?.email,
+                   username:doc?.data()?.username
+                  }
             });
       
           } 
