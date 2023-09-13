@@ -1,22 +1,22 @@
 const admin = require("firebase-admin");
 const axios = require('axios')
-const Web3 = require("web3")
+// const Web3 = require("web3")
 const {retrieveLatestEthPrice }= require('../utils/fetchPrice') 
-const IFactory = require('@uniswap/v2-core/build/IUniswapV2Factory.json')
-const IPair = require('@uniswap/v2-core/build/IUniswapV2Pair.json')  
-const IRouter = require('@uniswap/v2-periphery/build/IUniswapV2Router02.json')
-const IERC20 = require('@uniswap/v2-periphery/build/IERC20.json')
+// const IFactory = require('@uniswap/v2-core/build/IUniswapV2Factory.json')
+// const IPair = require('@uniswap/v2-core/build/IUniswapV2Pair.json')  
+// const IRouter = require('@uniswap/v2-periphery/build/IUniswapV2Router02.json')
+// const IERC20 = require('@uniswap/v2-periphery/build/IERC20.json')
 
-const addrSFactory = "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
-const addrSRouter ="0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F"
-const addrUFactory ="0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
-const addrURouter = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
+// const addrSFactory = "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
+// const addrSRouter ="0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F"
+// const addrUFactory ="0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+// const addrURouter = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
 
-const wss="wss://mainnet.infura.io/ws/v3/85fc7c4c61664a96808975adbb581787"
-const web3 = new Web3(wss)
-const uRouter = new web3.eth.Contract(IRouter.abi,addrURouter)
+// const wss="wss://mainnet.infura.io/ws/v3/85fc7c4c61664a96808975adbb581787"
+// const web3 = new Web3(wss)
+// const uRouter = new web3.eth.Contract(IRouter.abi,addrURouter)
 
-const eth="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+// const eth="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
 
  exports.saveTrade= async (req, res, next) => {
      const { amount,uid,assetAddress,pair } = req.body;
