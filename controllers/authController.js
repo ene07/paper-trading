@@ -60,12 +60,11 @@ exports.login = async (req, res, next) => {
             console.log(user,"userrr")
             const userRef = db.collection('users').doc(user?.uid);
             const doc = await userRef.get();
-
-            if (!doc?.data() || !(await bcrypt.compare(doc?.data()?.passwordHash,password))) {
-                res.status(401).json({
-                    status: 'failed',
-                    error:('Email or Password is incorrect')
-                });
+            console.log(typeof(doc?.data()?.passwordHash),typeof(password),"hash")
+            console.log(await bcrypt.compare(password,doc?.data()?.passwordHash),"iiiii")
+            if (!(await bcrypt.compare(password,doc?.data()?.passwordHash))) {
+                throw new Error("Email or password incorrect")
+                return
 
             }
    
