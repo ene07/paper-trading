@@ -3,7 +3,7 @@ const express = require('express');
 
 
 const {signUp,login}=require("../controllers/authController")
-const {saveTrade,getPairs,getTransactions} = require('../controllers/transactionController');
+const {saveTrade,getPairs,getTransactions,leaderBoard,getUserPortfolio,getUserProfile} = require('../controllers/transactionController');
 
 
 
@@ -14,6 +14,9 @@ router.route('/login').post(login);
 router.route('/transaction').post(saveTrade);
 router.route('/get-pairs').get(getPairs);
 router.route('/get-transactions').post(getTransactions);
+router.route('/leader').get(leaderBoard);
+router.route('/portfolio').post(getUserPortfolio);
+router.route('/profile').post(getUserPortfolio);
 // router.route('/verify').post(verify);
 
 

@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 
 exports.signUp = async (req, res, next) => {
-    const { password, email } = req.body;
+    const { password, email,wallet } = req.body;
     try{
       
         const db=admin.firestore();
@@ -20,7 +20,11 @@ exports.signUp = async (req, res, next) => {
             id:user.uid,
             username: req.body.username,
             email: req.body.email,
-            passwordHash:signInCred.password
+            wallet:wallet,
+            trades:0,
+            tradedPairs:[],
+
+            passwordHash:signInCred.password,
           }
         const data=await db.collection("users").doc(user.uid).set(userData)
         const userRef = db.collection('users').doc(user?.uid);
@@ -31,7 +35,8 @@ exports.signUp = async (req, res, next) => {
             data:{
                id: doc?.id,
                email:doc?.data()?.email,
-               username:doc?.data()?.username
+               username:doc?.data()?.username,
+               wallet:doc?.data()?.wallet
               }
         });
 
@@ -73,7 +78,8 @@ exports.login = async (req, res, next) => {
                 data:{
                    id: doc?.id,
                    email:doc?.data()?.email,
-                   username:doc?.data()?.username
+                   username:doc?.data()?.username,
+                   wallet:doc?.data()?.wallet
                   }
             });
       
