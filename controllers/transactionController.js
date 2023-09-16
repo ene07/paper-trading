@@ -189,6 +189,7 @@ exports.getUserProfile= async (req, res, next) => {
       const db=admin.firestore();
       const userRef = db.collection('users').doc(uid);
       const doc = await userRef.get();
+      console.log(doc,"doc user")
       res.status(200).json({
         status: 'success',
         data:{

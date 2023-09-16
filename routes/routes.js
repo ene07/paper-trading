@@ -16,7 +16,7 @@ router.route('/get-pairs').get(getPairs);
 router.route('/get-transactions').post(getTransactions);
 router.route('/leader').get(leaderBoard);
 router.route('/portfolio').post(getUserPortfolio);
-router.route('/profile').post(getUserPortfolio);
+router.route('/profile').post(getUserProfile);
 // router.route('/verify').post(verify);
 
 
