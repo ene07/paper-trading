@@ -223,7 +223,12 @@ exports.getUserPortfolio= async (req, res, next) => {
         console.log(doc.id, '=>', doc.data())
         portfolio.push({
             id:doc.id,
-            ...doc.data()
+          
+            username:doc.data().username,
+            wallet:doc.data().wallet,
+            trades:doc.data().trades,
+            tradedPairs:doc.data().tradedPairs,
+            balance:doc.data().balance,
            })
       });
 
@@ -252,7 +257,13 @@ exports.leaderBoard= async (req, res, next) => {
         const users=[]
         snapshot.forEach(doc => {
           console.log(doc.id, '=>', doc.data());
-           users.push({id:doc?.id,...doc.data()})
+           users.push({id:doc.id,
+          
+            username:doc.data().username,
+            wallet:doc.data().wallet,
+            trades:doc.data().trades,
+            tradedPairs:doc.data().tradedPairs,
+            balance:doc.data().balance} )
         });
 
 
