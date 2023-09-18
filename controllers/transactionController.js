@@ -5,11 +5,11 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
  exports.saveTrade= async (req, res, next) => {
 
-    //  const { amount,uid,assetId} = req.body;
+     const { amount,uid,assetId} = req.body;
 
-      const amount=0.5
-      const uid="5ie9ugD4lXNn87iMS4s0x4E6fXW2"
-      const assetId="bitcoin"
+      // const amount=0.5
+      // const uid="5ie9ugD4lXNn87iMS4s0x4E6fXW2"
+      // const assetId="bitcoin"
       try{
 
           const db=admin.firestore();
