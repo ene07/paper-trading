@@ -6,6 +6,7 @@ const crypto = require('crypto');
 
 exports.signUp = async (req, res, next) => {
     const { password, email,wallet } = req.body;
+    console.log(req.body)
     try{
       
         const db=admin.firestore();
@@ -13,7 +14,8 @@ exports.signUp = async (req, res, next) => {
             email,
             password,
           };
-        signInCred.password = await bcrypt.hash(password, 12);
+       
+        signInCred.password = await bcrypt.hash(req.body.password, 12);
         const user = await admin.auth().createUser(signInCred)
         console.log( user,"user")
         const userData = {
@@ -24,6 +26,7 @@ exports.signUp = async (req, res, next) => {
             trades:0,
             tradedPairs:[],
             balance:0,
+            totalProfit:0,
 
             passwordHash:signInCred.password,
           }

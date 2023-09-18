@@ -1,53 +1,36 @@
 const admin = require("firebase-admin");
 const axios = require('axios')
-const {retrieveLatestEthPrice }= require('../utils/fetchPrice') 
-// const IFactory = require('@uniswap/v2-core/build/IUniswapV2Factory.json')
-// const IPair = require('@uniswap/v2-core/build/IUniswapV2Pair.json')  
-// const IRouter = require('@uniswap/v2-periphery/build/IUniswapV2Router02.json')
-// const IERC20 = require('@uniswap/v2-periphery/build/IERC20.json')
+const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchPrice') 
 
-// const addrSFactory = "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
-// const addrSRouter ="0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F"
-// const addrUFactory ="0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
-// const addrURouter = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
-
-// const wss="wss://mainnet.infura.io/ws/v3/85fc7c4c61664a96808975adbb581787"
-// const web3 = new Web3(wss)
-// const uRouter = new web3.eth.Contract(IRouter.abi,addrURouter)
-
-// const eth="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
 
  exports.saveTrade= async (req, res, next) => {
 
-     const { amount,uid,assetAddress,pair } = req.body;
+    //  const { amount,uid,assetId} = req.body;
 
+      const amount=0.5
+      const uid="5ie9ugD4lXNn87iMS4s0x4E6fXW2"
+      const assetId="bitcoin"
       try{
 
           const db=admin.firestore();
           const userRef = db.collection('users').doc(uid)
           const doc = await userRef.get();
-
-          // const  ethToken = new web3.eth.Contract(IERC20.abi,eth)
-          // const assetToken = new web3.eth.Contract(IERC20.abi,asset)
-          // const amountInWei = web3.utils.toWei(amount.toString(), 'ether')
-
-          // const amountOut =await uRouter.methods.getAmountsOut(1,[eth,"0x6B175474E89094C44Da98b954EedeAC495271d0F"]).call()
-
-          // console.log(amountOut,"outt")
-
-          const price =await retrieveLatestEthPrice(pair)
+           console.log(doc.data(),"docoo")
+          const result =await retrieveLatestEthPrice(assetId)
+          
+           const price= result?.data[assetId]?.eth
           const amountOut=Number(amount) / Number(price)
-          console.log(amountOut,"amount")
+          console.log(amountOut,"out")
 
-          const usd =await retrieveLatestEthPrice("ETHUSDT")
+          const priceusd =await retrieveLatestUsdPrice(assetId)
 
-          const amountUsd= price * usd
+          const amountUsd=Number(priceusd.data[assetId].usd) * amountOut
           console.log(amountUsd,"usd")
 
 
             const tx={
                 trader:doc.data()?.id,
-                pair:pair,
+                pair:assetId,
                 amount:amountOut,
                 usd:amountUsd,
                 date:Date.now()
@@ -56,14 +39,8 @@ const {retrieveLatestEthPrice }= require('../utils/fetchPrice')
              const txResult= await db.collection('transactions').add(tx);
              const txRef = db.collection('transactions').doc(txResult.id);
              const txDoc = await txRef.get();
-             console.log(doc.data()?.tradedPairs?.includes(pair),"pairrr old")
-         
-          //  const newuserRef = db.collection('users').doc(uid)
-          //  const newdoc = await newuserRef.get();   
-              
-          //   console.log(newdoc.data()?.tradedPairs?.includes(pair),"pair new")
-            const tokenDoc=await db.collection("users").doc(uid).collection("tokens").doc(pair).get()
-            if(doc.data()?.tradedPairs?.includes(pair)){
+            const tokenDoc=await db.collection("users").doc(uid).collection("tokens").doc(assetId).get()
+            if(doc.data()?.tradedPairs?.includes(assetId)){
             
 
 
@@ -73,7 +50,7 @@ const {retrieveLatestEthPrice }= require('../utils/fetchPrice')
                     collection("users").
                     doc(uid).
                     collection("tokens").
-                    doc(pair).update(
+                    doc(assetId).update(
                            { 
                                 balance:amountOut + tokenDoc?.data()?.balance,
                                 totalUSD:amountUsd + tokenDoc?.data()?.totalUSD,
@@ -84,9 +61,9 @@ const {retrieveLatestEthPrice }= require('../utils/fetchPrice')
                 const tokenRef = db.
                 collection('users').
                 doc(uid).collection("tokens")
-                  .doc(pair).
+                  .doc(assetId).
                 set({
-                    name:pair,
+                    name:assetId,
                    balance:Number(amountOut),
                    totalUSD:Number(amountUsd)
 
@@ -95,7 +72,7 @@ const {retrieveLatestEthPrice }= require('../utils/fetchPrice')
 
            }    
            
-            if(doc.data()?.tradedPairs?.includes(pair)){
+            if(doc.data()?.tradedPairs?.includes(assetId)){
                ( db.collection("users").doc(uid)).update({
                           trades:Number(doc.data()?.trades) + 1,
           
@@ -103,7 +80,7 @@ const {retrieveLatestEthPrice }= require('../utils/fetchPrice')
                  }else{
                    ( db.collection("users").doc(uid)).update({
                     trades:Number(doc.data()?.trades) + 1,
-                    tradedPairs:[...doc.data()?.tradedPairs,pair]
+                    tradedPairs:[...doc.data()?.tradedPairs,assetId]
                    })
 
                  }
@@ -159,16 +136,27 @@ const {retrieveLatestEthPrice }= require('../utils/fetchPrice')
 
  exports.getPairs= async (req, res, next) => {
   
+
     try{
+      // const resp = await axios({
+      //   url: 'https://api.binance.com/api/v3/ticker/price',
+      //   method: 'get'
+      // })
       const resp = await axios({
-        url: 'https://api.binance.com/api/v3/ticker/price',
+        url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en',
         method: 'get'
       })
-      console.log(resp.data) 
+      const result =resp.data
+      console.log(result,"result ,,,")
+         const tokens=[]
+        result.map((token)=>{
+          tokens.push({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id})
+
+        })
       
       res.status(200).json({
         status: 'Success',
-        data:resp.data
+        data:tokens
       });
 
    }catch(e){
