@@ -29,7 +29,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
 
             const tx={
-                trader:doc.data()?.id,
+                trader:doc.id,
                 pair:assetId,
                 amount:amountOut,
                 usd:amountUsd,
