@@ -5,11 +5,11 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
  exports.saveTrade= async (req, res, next) => {
 
-     const { amount,uid,assetId} = req.body;
+    //  const { amount,uid,assetId} = req.body;
 
-      // const amount=0.5
-      // const uid="5ie9ugD4lXNn87iMS4s0x4E6fXW2"
-      // const assetId="bitcoin"
+      const amount=0.5
+      const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
+      const assetId="bitcoin"
       try{
 
           const db=admin.firestore();
@@ -37,8 +37,10 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                 
               }
              const txResult= await db.collection('transactions').add(tx);
+             console.log(txResult,"txResult")
              const txRef = db.collection('transactions').doc(txResult.id);
              const txDoc = await txRef.get();
+             console.log(txDoc.data())
             const tokenDoc=await db.collection("users").doc(uid).collection("tokens").doc(assetId).get()
             if(doc.data()?.tradedPairs?.includes(assetId)){
             
@@ -78,6 +80,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           
                          })
                  }else{
+               
                    ( db.collection("users").doc(uid)).update({
                     trades:Number(doc.data()?.trades) + 1,
                     tradedPairs:[...doc.data()?.tradedPairs,assetId]
@@ -198,7 +201,8 @@ exports.getUserProfile= async (req, res, next) => {
 
 exports.getUserPortfolio= async (req, res, next) => {
       
-     const {uid} = req.body;
+    //  const {uid} = req.body;
+    const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
      try{
       console.log("runinggg")
       const db=admin.firestore();
@@ -211,12 +215,10 @@ exports.getUserPortfolio= async (req, res, next) => {
         console.log(doc.id, '=>', doc.data())
         portfolio.push({
             id:doc.id,
-          
-            username:doc.data().username,
-            wallet:doc.data().wallet,
-            trades:doc.data().trades,
-            tradedPairs:doc.data().tradedPairs,
+            totalUsd:doc.data().totalUSD,
             balance:doc.data().balance,
+            profit:0,
+            spent:0
            })
       });
 
