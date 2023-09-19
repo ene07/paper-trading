@@ -5,11 +5,11 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
  exports.saveTrade= async (req, res, next) => {
 
-    //  const { amount,uid,assetId} = req.body;
+     const { amount,uid,assetId} = req.body;
 
-      const amount=0.5
-      const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
-      const assetId="bitcoin"
+      // const amount=0.5
+      // const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
+      // const assetId="bitcoin"
       try{
 
           const db=admin.firestore();
@@ -201,8 +201,8 @@ exports.getUserProfile= async (req, res, next) => {
 
 exports.getUserPortfolio= async (req, res, next) => {
       
-    //  const {uid} = req.body;
-    const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
+     const {uid} = req.body;
+    // const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
      try{
       console.log("runinggg")
       const db=admin.firestore();
