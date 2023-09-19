@@ -153,7 +153,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       console.log(result,"result ,,,")
          const tokens=[]
         result.map((token)=>{
-          tokens.push({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id})
+          tokens.push({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id,img:token?.image})
 
         })
       
@@ -210,11 +210,20 @@ exports.getUserPortfolio= async (req, res, next) => {
       const snapshot= (await tokenRef.get()).docs
       console.log(snapshot,"iii")
 
+      const resp = await axios({
+        url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en',
+        method: 'get'
+      })
+      const result =resp.data
+
       const portfolio=[]
       snapshot.forEach(doc => {
         console.log(doc.id, '=>', doc.data())
+         const token=result.find((token)=>token.id ==doc.id)
+         console.log(token,"tokennn")
         portfolio.push({
             id:doc.id,
+            img:token.image,
             totalUsd:doc.data().totalUSD,
             balance:doc.data().balance,
             profit:0,
