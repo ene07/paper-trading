@@ -66,8 +66,8 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                   .doc(assetId).
                 set({
                     name:assetId,
-                   balance:Number(amountOut),
-                   totalUSD:Number(amountUsd)
+                    balance:Number(amountOut),
+                    totalUSD:Number(amountUsd)
 
                 })
             
@@ -174,8 +174,8 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
 
 exports.getUserProfile= async (req, res, next) => {    
-   const {uid} = req.body;
-
+  //  const {uid} = req.body;
+     const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
     try{
       const db=admin.firestore();
       const userRef = db.collection('users').doc(uid);
@@ -272,9 +272,46 @@ exports.leaderBoard= async (req, res, next) => {
         });
       
 
-     }catch(e){
-      console.log(e)
-     }
+      }catch(e){
+        console.log(e)
+        res.status(403).json({
+          status: 'failed',
+          error:e.message
+          });
+      }
 
 
+}
+
+
+
+exports.deposit= async (req, res, next) => {
+  const { deposit,uid} = req.body;
+  // const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
+  // const deposit=0.5
+ try{
+    const db=admin.firestore();
+    const userRef = db.collection('users').doc(uid)
+    const doc = await userRef.get();
+
+    const priceusd =await retrieveLatestUsdPrice("ethereum")
+
+    const amountUsd=Number(priceusd.data["ethereum"].usd) * deposit
+     const usdbalance= doc?.data()?.balanceUsd===undefined? 0:doc?.data()?.balanceUsd
+    db.collection('users').doc(uid).update(
+         { 
+           balance:deposit + doc?.data()?.balance,
+           balanceUsd:amountUsd + usdbalance,
+
+       })
+       const newdoc = await userRef.get();
+
+       res.status(200).json({
+        status: 'Success',
+        data:newdoc.data()
+      });
+
+   }catch(e){
+    console.log(e)
+   }
 }

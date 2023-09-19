@@ -26,6 +26,7 @@ exports.signUp = async (req, res, next) => {
             trades:0,
             tradedPairs:[],
             balance:0,
+            balanceUsd:0,
             totalProfit:0,
 
             passwordHash:signInCred.password,
