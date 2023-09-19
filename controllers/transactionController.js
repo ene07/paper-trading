@@ -3,6 +3,7 @@ const axios = require('axios')
 const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchPrice') 
 
 
+
  exports.saveTrade= async (req, res, next) => {
 
      const { amount,uid,assetId} = req.body;
@@ -14,85 +15,125 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
           const db=admin.firestore();
           const userRef = db.collection('users').doc(uid)
-          const doc = await userRef.get();
+           const doc = await userRef.get();
            console.log(doc.data(),"docoo")
-          const result =await retrieveLatestEthPrice(assetId)
-          
-           const price= result?.data[assetId]?.eth
-          const amountOut=Number(amount) / Number(price)
-          console.log(amountOut,"out")
-
-          const priceusd =await retrieveLatestUsdPrice(assetId)
-
-          const amountUsd=Number(priceusd.data[assetId].usd) * amountOut
-          console.log(amountUsd,"usd")
-
-
-            const tx={
-                trader:doc.id,
-                pair:assetId,
-                amount:amountOut,
-                usd:amountUsd,
-                date:Date.now()
+            
+           if( !doc.data().isEligible) {
+             throw new Error(" You exceed your transaction limit of 7")
+           }else{
                 
-              }
-             const txResult= await db.collection('transactions').add(tx);
-             console.log(txResult,"txResult")
-             const txRef = db.collection('transactions').doc(txResult.id);
-             const txDoc = await txRef.get();
-             console.log(txDoc.data())
-            const tokenDoc=await db.collection("users").doc(uid).collection("tokens").doc(assetId).get()
-            if(doc.data()?.tradedPairs?.includes(assetId)){
-            
+                const result =await retrieveLatestEthPrice(assetId)
+                
+                const price= result?.data[assetId]?.eth
+                const amountOut=Number(amount) / Number(price)
+                console.log(amountOut,"out btc")
+      
+                const priceusd =await retrieveLatestUsdPrice(assetId)
+      
+                const amountUsd=Number(priceusd.data[assetId].usd) * amountOut
+                console.log(amountUsd,"usd")
+                
+                  const profit = amountOut - amountOut
+      
+      
+      
+                  const tx={
+                      trader:doc.id,
+                      pair:assetId,
+                      amount:amountOut,
+                      usd:amountUsd,
+                      date:Date.now()
+                      
+                    }
+                    const txResult= await db.collection('transactions').add(tx);
+                    console.log(txResult,"txResult")
+                    const txRef = db.collection('transactions').doc(txResult.id);
+                    const txDoc = await txRef.get();
+                    console.log(txDoc.data())
+                  const tokenDoc=await db.collection("users").doc(uid).collection("tokens").doc(assetId).get()
+                  if(doc.data()?.tradedPairs?.includes(assetId)){
+                  
+      
+      
+                    
+                
+                        ( db.
+                          collection("users").
+                          doc(uid).
+                          collection("tokens").
+                          doc(assetId).update(
+                                  { 
+                                      balance:amountOut + tokenDoc?.data()?.balance,
+                                      totalUSD:amountUsd + tokenDoc?.data()?.totalUSD,
+      
+                                    }))
+      
+                    }else{
+                      const tokenRef = db.
+                      collection('users').
+                      doc(uid).collection("tokens")
+                        .doc(assetId).
+                      set({
+                          name:assetId,
+                          balance:Number(amountOut),
+                          totalUSD:Number(amountUsd)
+      
+                      })
+                  
+      
+                  }    
+                  
+                  if(doc.data()?.tradedPairs?.includes(assetId)){
+                          if(doc.data()?.premium){
+
+                        
+                               ( db.collection("users").doc(uid)).update({
+                                  trades:Number(doc.data()?.trades) + 1,
+                                  isEligible:true,
+                
+                                })
+                              }else{
+                                  if(doc.data().freeTx ==0){
+                                       ( db.collection("users").doc(uid)).update({
+                                         trades:Number(doc.data()?.trades) + 1,
+                                         isEligible:false,
+                      
+                                      })
+
+                                      throw new Error("You have exceeded your trading limit")
 
 
-             
-         
-                  ( db.
-                    collection("users").
-                    doc(uid).
-                    collection("tokens").
-                    doc(assetId).update(
-                           { 
-                                balance:amountOut + tokenDoc?.data()?.balance,
-                                totalUSD:amountUsd + tokenDoc?.data()?.totalUSD,
+                                  }else{
+                                     ( db.collection("users").doc(uid)).update({
+                                       trades:Number(doc.data()?.trades) + 1,
+                                       freeTx:Number(doc.data()?.freeTx) -1
+                      
+                                    })
 
-                              }))
+                                  }
 
-              }else{
-                const tokenRef = db.
-                collection('users').
-                doc(uid).collection("tokens")
-                  .doc(assetId).
-                set({
-                    name:assetId,
-                    balance:Number(amountOut),
-                    totalUSD:Number(amountUsd)
 
-                })
-            
-
-           }    
-           
-            if(doc.data()?.tradedPairs?.includes(assetId)){
-               ( db.collection("users").doc(uid)).update({
+                              }
+                        }else{
+                      
+                          ( db.collection("users").doc(uid)).update({
                           trades:Number(doc.data()?.trades) + 1,
+                          tradedPairs:[...doc.data()?.tradedPairs,assetId]
+                          })
+      
+                        }
           
-                         })
-                 }else{
-               
-                   ( db.collection("users").doc(uid)).update({
-                    trades:Number(doc.data()?.trades) + 1,
-                    tradedPairs:[...doc.data()?.tradedPairs,assetId]
-                   })
+                  
+                  res.status(200).json({
+                    status: 'Success',     
+                    data:txDoc.data()
+                  });
 
-                 }
-    
-            
-            res.status(200).json({
-              status: 'Success',     
-              data:txDoc.data()
-            });
+                }
+                  
+           
+
+
           
 
 
@@ -174,8 +215,8 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
 
 exports.getUserProfile= async (req, res, next) => {    
-  //  const {uid} = req.body;
-     const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
+   const {uid} = req.body;
+    //  const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
     try{
       const db=admin.firestore();
       const userRef = db.collection('users').doc(uid);

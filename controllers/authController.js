@@ -28,6 +28,10 @@ exports.signUp = async (req, res, next) => {
             balance:0,
             balanceUsd:0,
             totalProfit:0,
+            paperBalance:0,
+            isEligible:true,
+            freeTx:7,
+            premium:false,
 
             passwordHash:signInCred.password,
           }
