@@ -186,21 +186,40 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       //   url: 'https://api.binance.com/api/v3/ticker/price',
       //   method: 'get'
       // })
-      const resp = await axios({
-        url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en',
-        method: 'get'
+      const db=admin.firestore();
+      const pairs = (await db.collection('pairs').get()).docs
+      const pairlist=[]
+      pairs.forEach(doc => {
+        console.log(doc.id, '=>', doc.data())
+        //  const token=result.find((token)=>token.id ==doc.id)
+        //  console.log(token,"tokennn")
+         pairlist.push({
+             ...doc.data()
+           })
       })
-      const result =resp.data
-      console.log(result,"result ,,,")
-         const tokens=[]
-        result.map((token)=>{
-          tokens.push({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id,img:token?.image})
+      // const resp = await axios({
+      //   url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en',
+      //   method: 'get'
+      // })
+      // const result =resp.data
+      // console.log(result,"result ,,,")
+      //    const tokens=[]
+      //    result.map((token)=>{
+      //      tokens.push({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id,img:token?.image})
 
-        })
+      //          pairRef.add({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id,img:token?.image}).then((res)=>{
+      //           console.log(res)
+
+      //          }).catch((e)=>{
+      //           console.log(e)
+
+      //          })
+
+      //   })
       
       res.status(200).json({
         status: 'Success',
-        data:tokens
+        data:pairlist
       });
 
    }catch(e){
@@ -242,8 +261,8 @@ exports.getUserProfile= async (req, res, next) => {
 
 exports.getUserPortfolio= async (req, res, next) => {
       
-     const {uid} = req.body;
-    // const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
+    //  const {uid} = req.body;
+    const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
      try{
       console.log("runinggg")
       const db=admin.firestore();
