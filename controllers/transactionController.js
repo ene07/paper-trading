@@ -187,6 +187,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       //   method: 'get'
       // })
       const db=admin.firestore();
+      // const pairRef = await db.collection('pairs')
       const pairs = (await db.collection('pairs').get()).docs
       const pairlist=[]
       pairs.forEach(doc => {
