@@ -388,6 +388,8 @@ exports.leaderBoard= async (req, res, next) => {
             wallet:doc.data().wallet,
             trades:doc.data().trades,
             tradedPairs:doc.data().tradedPairs,
+            paperBalance:doc.data().paperBalance,
+            totalProfit:doc.data().totalProfit,
             balance:doc.data().balance} )
         });
 
@@ -439,5 +441,38 @@ exports.deposit= async (req, res, next) => {
 
    }catch(e){
     console.log(e)
-   }
+    res.status(403).json({
+      status: 'failed',
+      error:e.message
+      });
+
+}
+
+}
+
+
+
+
+exports.getCharts= async (req, res, next) => {
+  const {assetId} = req.body;
+
+  try{
+     const resp = await axios({
+        url: `https://api.coingecko.com/api/v3/coins/${assetId}/ohlc?vs_currency=usd&days=14`,
+        method: 'get'
+      })
+
+      console.log(resp.data)
+    
+      res.status(200).json({
+        status: 'Success',
+        data:resp.data
+      });
+  }catch(e){
+    console.log(e)
+    res.status(403).json({
+      status: 'failed',
+      error:e.message
+      });
+  }
 }
