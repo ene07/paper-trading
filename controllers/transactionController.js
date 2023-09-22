@@ -187,7 +187,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       //   method: 'get'
       // })
       const db=admin.firestore();
-      // const pairRef = await db.collection('pairs')
+      const pairRef = await db.collection('pairs')
       const pairs = (await db.collection('pairs').get()).docs
       const pairlist=[]
       pairs.forEach(doc => {
@@ -202,22 +202,87 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       //   url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en',
       //   method: 'get'
       // })
-      // const result =resp.data
-      // console.log(result,"result ,,,")
-      //    const tokens=[]
-      //    result.map((token)=>{
-      //      tokens.push({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id,img:token?.image})
 
-      //          pairRef.add({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id,img:token?.image}).then((res)=>{
-      //           console.log(res)
 
-      //          }).catch((e)=>{
-      //           console.log(e)
-
-      //          })
-
-      //   })
+      // console.log(resp,"resp")
       
+      // const result =[
+      //   {
+      //     "symbol": "usdc",
+      //     "img": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
+      //     "price": 0.999868,
+      //     "name": "USD Coin",
+      //     "id": "usd-coin"
+      //   },
+      //   {
+      //     "symbol": "usdt",
+      //     "img": "https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663",
+      //     "price": 1,
+      //     "name": "Tether",
+      //     "id": "tether"
+      //   },
+      //   {
+      //     "symbol": "dai",
+      //     "img": "https://assets.coingecko.com/coins/images/9956/large/Badge_Dai.png?1687143508",
+      //     "price": 0.999323,
+      //     "name": "Dai",
+      //     "id": "dai"
+      //   },
+      //   {
+      //     "symbol": "wbtc",
+      //     "img": "https://assets.coingecko.com/coins/images/7598/large/wrapped_bitcoin_wbtc.png?1548822744",
+      //     "price": 27137,
+      //     "name": "Wrapped Bitcoin",
+      //     "id": "wrapped-bitcoin"
+      //   },
+      //   {
+      //     "symbol": "uni",
+      //     "img": "https://assets.coingecko.com/coins/images/12504/large/uni.jpg?1687143398",
+      //     "price": 4.37,
+      //     "name": "Uniswap",
+      //     "id": "uniswap"
+      //   },
+      //   {
+      //     "symbol": "link",
+      //     "img": "https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1547034700",
+      //     "price": 6.92,
+      //     "name": "Chainlink",
+      //     "id": "chainlink"
+      //   },
+      //   {
+      //     "symbol": "aave",
+      //     "img": "https://assets.coingecko.com/coins/images/12645/large/AAVE.png?1601374110",
+      //     "price": 63.48,
+      //     "name": "Aave",
+      //     "id": "aave"
+      //   },
+      //   {
+      //     "symbol": "mkr",
+      //     "img": "https://assets.coingecko.com/coins/images/1364/large/Mark_Maker.png?1585191826",
+      //     "price": 1316.88,
+      //     "name": "Maker",
+      //     "id": "maker"
+      //   },
+    
+      //   ]
+
+      
+
+        //  const tokens=[]
+        // result.map((token)=>{
+        //    tokens.push({name:token?.name,symbol:token?.symbol,price:token?.current_price,id:token?.id,img:token?.img})
+
+        //       //    pairRef.add({name:token?.name,symbol:token?.symbol,price:token?.price,id:token?.id,img:token?.img}).then((res)=>{
+        //       //   console.log(res)
+
+        //       //  }).catch((e)=>{
+        //       //   console.log(e)
+
+        //       //  })
+
+        // })
+      
+          // const data=tokens.filter((token)=>token?.id===result.id)
       res.status(200).json({
         status: 'Success',
         data:pairlist

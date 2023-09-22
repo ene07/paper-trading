@@ -1,1 +1,66 @@
 node_modules
+
+
+
+
+{
+  "status": "Success",
+  "data": [
+    {
+      "symbol": "usdc",
+      "img": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
+      "price": 0.999868,
+      "name": "USD Coin",
+      "id": "usd-coin"
+    },
+    {
+      "symbol": "usdt",
+      "img": "https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663",
+      "price": 1,
+      "name": "Tether",
+      "id": "tether"
+    },
+    {
+      "symbol": "dai",
+      "img": "https://assets.coingecko.com/coins/images/9956/large/Badge_Dai.png?1687143508",
+      "price": 0.999323,
+      "name": "Dai",
+      "id": "dai"
+    },
+    {
+      "symbol": "wbtc",
+      "img": "https://assets.coingecko.com/coins/images/7598/large/wrapped_bitcoin_wbtc.png?1548822744",
+      "price": 27137,
+      "name": "Wrapped Bitcoin",
+      "id": "wrapped-bitcoin"
+    },
+    {
+      "symbol": "uni",
+      "img": "https://assets.coingecko.com/coins/images/12504/large/uni.jpg?1687143398",
+      "price": 4.37,
+      "name": "Uniswap",
+      "id": "uniswap"
+    },
+    {
+      "symbol": "link",
+      "img": "https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1547034700",
+      "price": 6.92,
+      "name": "Chainlink",
+      "id": "chainlink"
+    },
+    {
+      "symbol": "aave",
+      "img": "https://assets.coingecko.com/coins/images/12645/large/AAVE.png?1601374110",
+      "price": 63.48,
+      "name": "Aave",
+      "id": "aave"
+    },
+    {
+      "symbol": "mkr",
+      "img": "https://assets.coingecko.com/coins/images/1364/large/Mark_Maker.png?1585191826",
+      "price": 1316.88,
+      "name": "Maker",
+      "id": "maker"
+    },
+
+    ]
