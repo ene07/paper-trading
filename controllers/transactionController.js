@@ -9,15 +9,21 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
      const { amount,uid,assetId} = req.body;
 
       // const amount=0.5
-      // const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
-      // const assetId="bitcoin"
+      // const uid="7lsgmpvJ9nZXTmdmsMCYbwR83GA2"
+      // const assetId="chainlink"
       try{
 
           const db=admin.firestore();
           const userRef = db.collection('users').doc(uid)
            const doc = await userRef.get();
            console.log(doc.data(),"docoo")
-            
+
+
+           if( doc.data()?.balance < amount) {
+              throw new Error(" You dont have enough paper ETH to trade ")
+
+           }else{ 
+           
            if( !doc.data().isEligible) {
              throw new Error(" You exceed your transaction limit of 7")
            }else{
@@ -123,7 +129,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       
                         }
           
-                  
+                      }
                   res.status(200).json({
                     status: 'Success',     
                     data:txDoc.data()
