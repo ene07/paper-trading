@@ -461,7 +461,7 @@ exports.getCharts= async (req, res, next) => {
   const db=admin.firestore();
 
   try{
-
+      //  const chartRef = db.collection('charts');
     //  const resp = await axios({
     //     url: `https://api.coingecko.com/api/v3/coins/${assetId}/ohlc?vs_currency=usd&days=14`,
     //     method: 'get'
@@ -472,26 +472,24 @@ exports.getCharts= async (req, res, next) => {
      
 
     //       chart.push({
-    //         date:token[0],
-    //         open:token[1],
-    //         high:token[2],
-    //         low:token[3],
-    //         close:token[4]
+    //         x:token[0],
+    //         y:[...token.slice(1,5)],
+           
     //     })
 
 
     //    })
 
-    //    console.log(chart)
-    //   chartRef.doc(assetId).set({data:chart}).then((res)=>{
-    //     console.log(res)
+      //  console.log(chart)
+      // chartRef.doc(assetId).set({data:chart}).then((res)=>{
+      //   console.log(res)
 
-    //    }).catch((e)=>{
-    //     console.log(e)
+      //  }).catch((e)=>{
+      //   console.log(e)
 
-    //    })
+      //  })
 
-    //    console.log("done")
+      //  console.log("done")
 
     const chartRef = db.collection('charts').doc(assetId);
     const doc = await chartRef.get();
