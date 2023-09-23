@@ -456,18 +456,60 @@ exports.deposit= async (req, res, next) => {
 exports.getCharts= async (req, res, next) => {
   const {assetId} = req.body;
 
+  // const assetId="chainlink"
+
+  const db=admin.firestore();
+
   try{
-     const resp = await axios({
-        url: `https://api.coingecko.com/api/v3/coins/${assetId}/ohlc?vs_currency=usd&days=14`,
-        method: 'get'
+
+    //  const resp = await axios({
+    //     url: `https://api.coingecko.com/api/v3/coins/${assetId}/ohlc?vs_currency=usd&days=14`,
+    //     method: 'get'
+    //   })
+    //   const chart=[]
+    //   console.log(resp.data)
+    //    resp.data.map((token)=>{
+     
+
+    //       chart.push({
+    //         date:token[0],
+    //         open:token[1],
+    //         high:token[2],
+    //         low:token[3],
+    //         close:token[4]
+    //     })
+
+
+    //    })
+
+    //    console.log(chart)
+    //   chartRef.doc(assetId).set({data:chart}).then((res)=>{
+    //     console.log(res)
+
+    //    }).catch((e)=>{
+    //     console.log(e)
+
+    //    })
+
+    //    console.log("done")
+
+    const chartRef = db.collection('charts').doc(assetId);
+    const doc = await chartRef.get();
+    res.status(200).json({
+      status: 'success',
+      data:{
+         id: doc?.id,
+         ...doc.data()
+        }
       })
 
-      console.log(resp.data)
-    
-      res.status(200).json({
-        status: 'Success',
-        data:resp.data
-      });
+
+     
+      
+      // res.status(200).json({
+      //   status: 'Success',
+      //   data:chart
+      // });
   }catch(e){
     console.log(e)
     res.status(403).json({
