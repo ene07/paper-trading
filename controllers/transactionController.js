@@ -6,11 +6,11 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
  exports.saveTrade= async (req, res, next) => {
 
-    //  const { amount,uid,assetId} = req.body;
+     const { amount,uid,assetId} = req.body;
 
-      const amount=0.5
-      const uid="sa3a77thiFPFoOXct0IyKulv0m53"
-      const assetId="chainlink"
+      // const amount=0.5
+      // const uid="sa3a77thiFPFoOXct0IyKulv0m53"
+      // const assetId="chainlink"
       try{
 
           const db=admin.firestore();
