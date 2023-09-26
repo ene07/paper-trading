@@ -11,6 +11,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       // const amount=0.5
       // const uid="sa3a77thiFPFoOXct0IyKulv0m53"
       // const assetId="chainlink"
+      console.log(req.body)
       try{
 
           const db=admin.firestore();
@@ -161,7 +162,9 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
 
  exports.getTransactions= async (req, res, next) => {
-       const {uid} = req.body;
+       const {uid} = req.body;     
+       //  const uid="sa3a77thiFPFoOXct0IyKulv0m53"
+  
        try{
         const db=admin.firestore();
         const transactions=[]
@@ -169,15 +172,21 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
         const doc = await userRef.get();
         const txRef = db.collection('transactions');
         const query = (await txRef.where('trader', '==', doc.data()?.id).get()).docs
+        const amount=[]
+        const date=[]
         query.forEach(doc => {
           console.log(doc.id, '=>', doc.data());
-          transactions.push({id:doc.id,...doc.data()})
+          amount.push(doc.data()?.usd)
+          date.push(doc.data()?.date)
         });
         
         
          res.status(200).json({
            status: 'Success',
-           data:transactions
+           data:{
+             amount:amount,
+             date:date
+           }
          });
 
         }catch(e){
@@ -335,8 +344,8 @@ exports.getUserProfile= async (req, res, next) => {
 
 exports.getUserPortfolio= async (req, res, next) => {
       
-    //  const {uid} = req.body;
-    const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
+     const {uid} = req.body;
+    // const uid="GMIl8Sl0lAOK9sydS76HDKfn10i1"
      try{
       console.log("runinggg")
       const db=admin.firestore();
@@ -355,7 +364,7 @@ exports.getUserPortfolio= async (req, res, next) => {
         console.log(doc.id, '=>', doc.data())
          const token=result.find((token)=>token.id ==doc.id)
          console.log(token,"tokennn")
-        portfolio.push({
+          portfolio.push({
             id:doc.id,
             img:token.image,
             totalUsd:doc.data().totalUSD,
@@ -523,4 +532,74 @@ exports.getCharts= async (req, res, next) => {
       error:e.message
       });
   }
+}
+
+
+
+exports.getTokenDetails= async (req, res, next) => {
+      const {assetId,} = req.body;
+    try{
+
+       
+       }catch(e){
+      console.log(e)
+    }
+
+}
+
+
+
+
+
+exports.getChartByContractAddress= async (req, res, next) => {
+  const {contractAddress} = req.body;
+  // const contractAddress="0x6B175474E89094C44Da98b954EedeAC495271d0F"
+  const db=admin.firestore();
+  const chartRef = db.collection('charts');
+
+    try{
+      const doc = await chartRef.where('state', '==', 'CA');
+      const resp = await axios({
+        url: `https://api.geckoterminal.com/api/v2/networks/eth/tokens/${contractAddress}`,
+        method: 'get'
+      })
+
+      console.log(resp.data?.data?.attributes)
+
+    const res2 = await axios({
+        url: 'https://api.coingecko.com/api/v3/coins/list',
+        method: 'get'
+      })
+     const data= res2?.data?.filter((token)=>token?.symbol ==resp.data?.data?.attributes?.symbol?.toLowerCase())
+     console.log(data[0],"data")
+        
+          const res3= await axios({
+              url: `https://api.coingecko.com/api/v3/coins/${data[0]?.id}/ohlc?vs_currency=usd&days=14`,
+              method: 'get'
+            })
+            const chart=[]
+            console.log(resp.data)
+            res3.data.map((token)=>{
+          
+
+                chart.push({
+                  x:token[0],
+                  y:[...token.slice(1,5)],
+                
+               })
+
+
+             })
+        res.status(200).json({
+        status: 'Success',
+        data:chart
+      });
+
+    }catch(e){ 
+      console.log(e)
+      res.status(403).json({
+        status: 'failed',
+        error:e.message
+        });
+    }
 }
