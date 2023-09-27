@@ -162,8 +162,8 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
 
  exports.getTransactions= async (req, res, next) => {
-       const {uid} = req.body;     
-       //  const uid="sa3a77thiFPFoOXct0IyKulv0m53"
+       const {uid,number,all} = req.body;     
+   
   
        try{
         const db=admin.firestore();
@@ -180,12 +180,73 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           date.push(doc.data()?.date)
         });
         
+        const data={
+          amount:amount,
+          date:date
+        }
+
+
+        const dates = data.date.map(timestamp => new Date(timestamp));
+
+ 
+        const groupedData = dates.reduce((acc, date, index) => {
+          const weekStartDate = new Date(date);
+          weekStartDate.setDate(date.getDate() - date.getDay()); 
+       
+          const currentDate = new Date(date);
+          const startDate = new Date(weekStartDate);
+          const weekCount = Math.ceil((currentDate - startDate) / (7 * 24 * 60 * 60 * 1000)) + 1;
         
+
+          while (acc.length < weekCount) {
+            acc.push({
+              amount: [],
+              date: [],
+            });
+          }
+        
+   
+          const weekIndex = weekCount - 1;
+          acc[weekIndex].amount.push(data.amount[index]);
+          acc[weekIndex].date.push(data.date[index]);
+        
+          return acc;
+        }, []);
+        
+        console.log();
+        const amounts=[]
+        const time=[]
+       if(all){
+        groupedData.slice(0,groupedData?.length).map((data)=>{
+          console.log(data,"dats")
+          amounts.push(...data?.amount)
+          time.push(...data?.date)
+             
+        } )
+
+       }else{
+        groupedData.slice(0,number).map((data)=>{
+          console.log(data,"dats")
+          amounts.push(...data?.amount)
+          time.push(...data?.date)
+             
+        } )
+
+       }
+
+       
+
+        
+
+
+
+
+
          res.status(200).json({
            status: 'Success',
            data:{
-             amount:amount,
-             date:date
+             amount:amounts,
+             date:time
            }
          });
 
@@ -479,44 +540,44 @@ exports.getCharts= async (req, res, next) => {
 
   try{
       //  const chartRef = db.collection('charts');
-    //  const resp = await axios({
-    //     url: `https://api.coingecko.com/api/v3/coins/${assetId}/ohlc?vs_currency=usd&days=14`,
-    //     method: 'get'
-    //   })
-    //   const chart=[]
-    //   console.log(resp.data)
-    //    resp.data.map((token)=>{
+     const resp = await axios({
+        url: `https://api.coingecko.com/api/v3/coins/${assetId}/ohlc?vs_currency=usd&days=14`,
+        method: 'get'
+      })
+      const chart=[]
+      console.log(resp.data)
+       resp.data.map((token)=>{
      
 
-    //       chart.push({
-    //         x:token[0],
-    //         y:[...token.slice(1,5)],
+          chart.push({
+            x:token[0],
+            y:[...token.slice(1,5)],
            
-    //     })
+        })
 
 
-    //    })
+       })
 
-      //  console.log(chart)
-      // chartRef.doc(assetId).set({data:chart}).then((res)=>{
-      //   console.log(res)
+       console.log(chart)
+       chartRef.doc(assetId).set({data:chart}).then((res)=>{
+        console.log(res)
 
-      //  }).catch((e)=>{
-      //   console.log(e)
+       }).catch((e)=>{
+        console.log(e)
 
-      //  })
+       })
 
-      //  console.log("done")
+       console.log("done")
 
-    const chartRef = db.collection('charts').doc(assetId);
-    const doc = await chartRef.get();
-    res.status(200).json({
-      status: 'success',
-      data:{
-         id: doc?.id,
-         ...doc.data()
-        }
-      })
+    // const chartRef = db.collection('charts').doc(assetId);
+    // const doc = await chartRef.get();
+    // res.status(200).json({
+    //   status: 'success',
+    //   data:{
+    //      id: doc?.id,
+    //      ...doc.data()
+    //     }
+    //   })
 
 
      
@@ -571,6 +632,7 @@ exports.getChartByContractAddress= async (req, res, next) => {
         method: 'get'
       })
      const data= res2?.data?.filter((token)=>token?.symbol ==resp.data?.data?.attributes?.symbol?.toLowerCase())
+  
      console.log(data[0],"data")
         
           const res3= await axios({
@@ -590,10 +652,22 @@ exports.getChartByContractAddress= async (req, res, next) => {
 
 
              })
-        res.status(200).json({
-        status: 'Success',
-        data:chart
-      });
+            const res4 = await axios({
+              url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=300&page=1&sparkline=false&locale=en',
+              method: 'get'
+            })
+            console.log(data[0]?.id,"res444")
+            const img=res4.data?.find((token)=>token.symbol ==data[0]?.symbol)?.image
+            console.log(img,"imag")
+            const attributes=resp.data?.data?.attributes
+            attributes["img"]=img
+            res.status(200).json({
+            status: 'Success',
+            data:{
+              details:attributes,
+              chart:chart
+              }
+          });
 
     }catch(e){ 
       console.log(e)
