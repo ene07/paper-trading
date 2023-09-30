@@ -532,9 +532,9 @@ exports.deposit= async (req, res, next) => {
 
 
 exports.getCharts= async (req, res, next) => {
-  // const {assetId} = req.body;
+  const {assetId} = req.body;
 
-  const assetId="chainlink"
+  // const assetId="chainlink"
 
   const db=admin.firestore();
 
