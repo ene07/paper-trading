@@ -532,9 +532,9 @@ exports.deposit= async (req, res, next) => {
 
 
 exports.getCharts= async (req, res, next) => {
-  const {assetId} = req.body;
+  // const {assetId} = req.body;
 
-  // const assetId="chainlink"
+  const assetId="chainlink"
 
   const db=admin.firestore();
 
@@ -558,14 +558,14 @@ exports.getCharts= async (req, res, next) => {
 
        })
 
-       console.log(chart)
-       chartRef.doc(assetId).set({data:chart}).then((res)=>{
-        console.log(res)
+      //  console.log(chart)
+      //  chartRef.doc(assetId).set({data:chart}).then((res)=>{
+      //   console.log(res)
 
-       }).catch((e)=>{
-        console.log(e)
+      //  }).catch((e)=>{
+      //   console.log(e)
 
-       })
+      //  })
 
        console.log("done")
 
@@ -582,10 +582,10 @@ exports.getCharts= async (req, res, next) => {
 
      
       
-      // res.status(200).json({
-      //   status: 'Success',
-      //   data:chart
-      // });
+      res.status(200).json({
+        status: 'Success',
+        data:chart
+      });
   }catch(e){
     console.log(e)
     res.status(403).json({
