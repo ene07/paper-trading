@@ -6,16 +6,35 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
  exports.saveTrade= async (req, res, next) => {
 
-     const { amount,uid,assetId} = req.body;
+     const { amount,uid,assetId,contract} = req.body;
 
       // const amount=0.5
       // const uid="sa3a77thiFPFoOXct0IyKulv0m53"
       // const assetId="chainlink"
-      console.log(req.body)
+      //  const contract="0x514910771af9ca656af840dff83e8264ecf986ca"
+      // console.log(req.body)
+      const timestamp= Date.now()
+      console.log(timestamp,"time")
       try{
+        const options = {
+          method: 'GET',
+          url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
+          headers: {
+            accept: 'application/json',
+            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+          }
+        };
+        
+          const response=   await axios.request(options)
+        
+          const data= response.data.data[response.data.total-1] 
+          console.log(data,"datat")
+          const priceEth=data?.price_eth
+          const priceUSd=data?.price_usd
+
 
           const db=admin.firestore();
-          const userRef = db.collection('users').doc(uid)
+           const userRef = db.collection('users').doc(uid)
            const doc = await userRef.get();
            console.log(doc.data(),"docoo")
 
@@ -31,16 +50,16 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                 
                 const result =await retrieveLatestEthPrice(assetId)
                 
-                const price= result?.data[assetId]?.eth
-                const amountOut=Number(amount) / Number(price)
+                // const price= result?.data[assetId]?.eth
+                const amountOut=Number(amount) / Number(priceEth)
                 console.log(amountOut,"out btc")
       
-                const priceusd =await retrieveLatestUsdPrice(assetId)
+                // const priceusd =await retrieveLatestUsdPrice(assetId)
       
-                const amountUsd=Number(priceusd.data[assetId].usd) * amountOut
+                const amountUsd=Number(priceUSd) * amountOut
                 console.log(amountUsd,"usd")
                 
-                  const profit = amountOut - amountOut
+                const profit = amountOut - amountOut
       
       
       
@@ -57,7 +76,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                     const txRef = db.collection('transactions').doc(txResult.id);
                     const txDoc = await txRef.get();
                     console.log(txDoc.data())
-                  const tokenDoc=await db.collection("users").doc(uid).collection("tokens").doc(assetId).get()
+                    const tokenDoc=await db.collection("users").doc(uid).collection("tokens").doc(assetId).get()
                   if(doc.data()?.tradedPairs?.includes(assetId)){
                   
       
@@ -139,13 +158,6 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
            
 
                 }
-                  
-           
-
-
-          
-
-
 
         }catch(e){
           console.log(e)
@@ -613,62 +625,114 @@ exports.getTokenDetails= async (req, res, next) => {
 
 
 exports.getChartByContractAddress= async (req, res, next) => {
-  const {contractAddress} = req.body;
-  // const contractAddress="0x6B175474E89094C44Da98b954EedeAC495271d0F"
-  const db=admin.firestore();
-  const chartRef = db.collection('charts');
+  const {contract} = req.body;
+  // const contract="0x514910771AF9Ca656af840dff83E8264EcF986CA"
+  // const db=admin.firestore();
+  // const chartRef = db.collection('charts');
 
     try{
-      const doc = await chartRef.where('state', '==', 'CA');
-      const resp = await axios({
-        url: `https://api.geckoterminal.com/api/v2/networks/eth/tokens/${contractAddress}`,
-        method: 'get'
-      })
+    //   const doc = await chartRef.where('state', '==', 'CA');
+    //   const resp = await axios({
+    //     url: `https://api.geckoterminal.com/api/v2/networks/eth/tokens/${contractAddress}`,
+    //     method: 'get'
+    //   })
 
-      console.log(resp.data?.data?.attributes)
+    //   console.log(resp.data?.data?.attributes)
 
-    const res2 = await axios({
-        url: 'https://api.coingecko.com/api/v3/coins/list',
-        method: 'get'
-      })
-     const data= res2?.data?.filter((token)=>token?.symbol ==resp.data?.data?.attributes?.symbol?.toLowerCase())
+    // const res2 = await axios({
+    //     url: 'https://api.coingecko.com/api/v3/coins/list',
+    //     method: 'get'
+    //   })
+    //  const data= res2?.data?.filter((token)=>token?.symbol ==resp.data?.data?.attributes?.symbol?.toLowerCase())
   
-     console.log(data[0],"data")
+    //  console.log(data[0],"data")
         
-          const res3= await axios({
-              url: `https://api.coingecko.com/api/v3/coins/${data[0]?.id}/ohlc?vs_currency=usd&days=14`,
-              method: 'get'
-            })
-            const chart=[]
-            console.log(resp.data)
-            res3.data.map((token)=>{
+    //       const res3= await axios({
+    //           url: `https://api.coingecko.com/api/v3/coins/${data[0]?.id}/ohlc?vs_currency=usd&days=14`,
+    //           method: 'get'
+    //         })
+    //         const chart=[]
+    //         console.log(resp.data)
+    //         res3.data.map((token)=>{
           
 
-                chart.push({
-                  x:token[0],
-                  y:[...token.slice(1,5)],
+    //             chart.push({
+    //               x:token[0],
+    //               y:[...token.slice(1,5)],
                 
-               })
+    //            })
 
 
-             })
-            const res4 = await axios({
-              url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=300&page=1&sparkline=false&locale=en',
-              method: 'get'
-            })
-            console.log(data[0]?.id,"res444")
-            const img=res4.data?.find((token)=>token.symbol ==data[0]?.symbol)?.image
-            console.log(img,"imag")
-            const attributes=resp.data?.data?.attributes
-            attributes["img"]=img
-            res.status(200).json({
+    //          })
+    //         const res4 = await axios({
+    //           url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=300&page=1&sparkline=false&locale=en',
+    //           method: 'get'
+    //         })
+    //         console.log(data[0]?.id,"res444")
+    //         const img=res4.data?.find((token)=>token.symbol ==data[0]?.symbol)?.image
+    //         console.log(img,"imag")
+    //         const attributes=resp.data?.data?.attributes
+    //         attributes["img"]=img
+    //         res.status(200).json({
+    //         status: 'Success',
+    //         data:{
+    //           details:attributes,
+    //           chart:chart
+    //           }
+    //       });
+
+        const opt = {
+          method: 'GET',
+          url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
+          headers: {
+            accept: 'application/json',
+            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+          }
+        };
+    
+        const detail=   await axios.request(opt)
+        const data= detail.data.data[detail.data.total-1] 
+        console.log(data,"datat")
+     
+
+        const options = {
+          method: 'GET',
+          url: `https://api.dev.dex.guru/v1/tradingview/history?symbol=${contract}-eth_USD&resolution=1D&from=1691072145&to=1691676945`,
+          headers: {
+            accept: 'application/json',
+            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+          }
+        };
+        
+       const response=await axios .request(options)
+       const chart=[]
+
+       console.log(response.data["t"],"t")
+
+       console.log(response.data["o"],"o")
+       console.log(response.data["c"],"c")
+       console.log(response.data["h"],"h")
+       console.log(response.data["l"],"l")
+       console.log(response.data["v"],"v")
+        
+
+       response.data["t"].map((l,i)=>{
+          console.log(l,i)
+          chart.push({
+            x:l,
+            y:[response.data["o"][i],response.data["h"][i],response.data["l"][i],response.data["c"][i],response.data["v"][i]]
+          })
+
+        })
+
+          
+        res.status(200).json({
             status: 'Success',
             data:{
-              details:attributes,
+              details:data,
               chart:chart
               }
           });
-
     }catch(e){ 
       console.log(e)
       res.status(403).json({
