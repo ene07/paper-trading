@@ -683,7 +683,7 @@ exports.getChartByContractAddress= async (req, res, next) => {
           console.log(l,i)
           chart.push({
             x:l,
-            y:[response.data["o"][i],response.data["h"][i],response.data["l"][i],response.data["c"][i],response.data["v"][i]]
+            y:[response.data["o"][i],response.data["h"][i],response.data["l"][i],response.data["c"][i]]
           })
 
         })
