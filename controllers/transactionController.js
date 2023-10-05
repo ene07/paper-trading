@@ -68,7 +68,8 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           "img": "https://assets.coingecko.com/coins/images/1364/large/Mark_Maker.png?1585191826",
           "price": 1316.88,
           "name": "Maker",
-          "id": "maker"
+          "id": "maker",
+          "contract": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2"
         },
     
         ]
@@ -339,13 +340,37 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
 
  exports.getPairs= async (req, res, next) => {
   
-
+     let list=[]
     try{
+         
       
-      res.status(200).json({
-        status: 'Success',
-        data:tokens
-      });
+    
+     
+      await Promise.all(tokens.map(async (token) => {
+        const options = {
+          method: 'GET',
+          url: `https://api.dev.dex.guru/v1/chain/1/tokens/${token.contract}/market/history?begin_timestamp=1588723228`,
+          headers: {
+            accept: 'application/json',
+            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+          }
+        };
+  
+        const response = await axios.request(options);
+        const data = response.data.data[response.data.total - 1];
+        console.log(data, "datat");
+        const priceEth = data?.price_eth;
+        const priceUSd = data?.price_usd;
+  
+        token["price"] = priceUSd;
+        list.push(token);
+        console.log(token);
+      }));
+         res.status(200).json({
+          status: 'Success',
+          data:list
+        });
+
 
    }catch(e){
     console.log(e)
@@ -774,4 +799,31 @@ exports.getChartByContractAddress= async (req, res, next) => {
         error:e.message
         });
     }
+}
+
+
+
+const getPrice=async(contract)=>{
+  const options = {
+    method: 'GET',
+    url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
+    headers: {
+      accept: 'application/json',
+      'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+    }
+  };
+  
+    const response=   await axios.request(options)
+  
+    const data= response.data.data[response.data.total-1] 
+    console.log(data,"datat")
+    const priceEth=data?.price_eth
+    const priceUSd=data?.price_usd
+
+    return  priceUSd
+
+    res.status(200).json({
+      status: 'Success',
+      data:list
+    });
 }
