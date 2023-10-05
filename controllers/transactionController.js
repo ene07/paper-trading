@@ -89,7 +89,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
           headers: {
             accept: 'application/json',
-            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+            'api-key': 'jVWBkdwJXDo9H-n7fyGcM9z5Bu-h98XrkxKxPzkcX0c'
           }
         };
         
@@ -352,7 +352,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           url: `https://api.dev.dex.guru/v1/chain/1/tokens/${token.contract}/market/history?begin_timestamp=1588723228`,
           headers: {
             accept: 'application/json',
-            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+            'api-key': 'jVWBkdwJXDo9H-n7fyGcM9z5Bu-h98XrkxKxPzkcX0c'
           }
         };
   
@@ -745,7 +745,7 @@ exports.getChartByContractAddress= async (req, res, next) => {
           url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
           headers: {
             accept: 'application/json',
-            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+            'api-key': 'jVWBkdwJXDo9H-n7fyGcM9z5Bu-h98XrkxKxPzkcX0c'
           }
         };
     
@@ -759,7 +759,7 @@ exports.getChartByContractAddress= async (req, res, next) => {
           url: `https://api.dev.dex.guru/v1/tradingview/history?symbol=${contract}-eth_USD&resolution=1D&from=1691072145&to=${currentTimestampInSeconds}`,
           headers: {
             accept: 'application/json',
-            'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+            'api-key': 'jVWBkdwJXDo9H-n7fyGcM9z5Bu-h98XrkxKxPzkcX0c'
           }
         };
         
@@ -809,7 +809,7 @@ const getPrice=async(contract)=>{
     url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
     headers: {
       accept: 'application/json',
-      'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'
+      'api-key': 'jVWBkdwJXDo9H-n7fyGcM9z5Bu-h98XrkxKxPzkcX0c'
     }
   };
   
