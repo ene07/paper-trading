@@ -740,6 +740,9 @@ exports.getChartByContractAddress= async (req, res, next) => {
 
     console.log(currentTimestampInSeconds)
 
+
+
+       
         const opt = {
           method: 'GET',
           url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
@@ -752,7 +755,35 @@ exports.getChartByContractAddress= async (req, res, next) => {
         const detail=   await axios.request(opt)
         const data= detail.data.data[detail.data.total-1] 
         console.log(data,"datat")
-     
+
+        const opt2 = {
+          method: 'GET',
+          url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}`,
+          headers: {
+            accept: 'application/json',
+            'api-key': 'jVWBkdwJXDo9H-n7fyGcM9z5Bu-h98XrkxKxPzkcX0c'
+          }
+        };
+
+   
+        
+     const inventory= await axios.request(opt2)
+     console.log(inventory.data["symbol"],inventory.data["name"],"tory")
+     data["symbol"]=inventory.data["symbol"]
+     data["name"]=inventory.data["name"]
+
+           try{
+
+              const resp = await axios({
+                url: ` https://api.coingecko.com/api/v3/search?query=${inventory.data["name"]}`,
+                method: 'get'
+              })
+               const token= resp.data.coins?.find((coin)=>coin.symbol===inventory.data["symbol"])
+               data["img"]=token.thumb
+          }catch(e){
+          console.log(e)
+          }
+
 
         const options = {
           method: 'GET',
@@ -766,13 +797,13 @@ exports.getChartByContractAddress= async (req, res, next) => {
        const response=await axios .request(options)
        const chart=[]
 
-       console.log(response.data["t"],"t")
+      //  console.log(response.data["t"],"t")
 
-       console.log(response.data["o"],"o")
-       console.log(response.data["c"],"c")
-       console.log(response.data["h"],"h")
-       console.log(response.data["l"],"l")
-       console.log(response.data["v"],"v")
+      //  console.log(response.data["o"],"o")
+      //  console.log(response.data["c"],"c")
+      //  console.log(response.data["h"],"h")
+      //  console.log(response.data["l"],"l")
+      //  console.log(response.data["v"],"v")
         
 
        response.data["t"].map((l,i)=>{
