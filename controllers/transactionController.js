@@ -1,5 +1,11 @@
 const admin = require("firebase-admin");
 const axios = require('axios')
+// const Web3 = require("web3")
+// const IERC20 = require('@uniswap/v2-periphery/build/IERC20.json')
+
+// const wss="https://eth-mainnet.g.alchemy.com/v2/-dsGUE0osTIPnOyCSZjHdOK_HWdxb85U"
+// const web3 = new Web3(wss)
+
 const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchPrice') 
 
 
@@ -9,7 +15,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           "img": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
           "name": "USD Coin",
           "id": "usd-coin",
-          "contract":"0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+          "contract":"0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" 
         },
         {
           "symbol": "usdt",
@@ -573,8 +579,69 @@ exports.getCharts= async (req, res, next) => {
 
 
 exports.getTokenDetails= async (req, res, next) => {
-      const {assetId,} = req.body;
+      // const {assetId,} = req.body;
+        const contract="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" 
     try{
+          // const apiKey = 'bkRyeOHGKRvs13_pUqWk29ripcV7BLrY';
+          // const apiUrl = 'https://api.polygon.io/v2/aggs/ticker/X:BTCUSD/range/2/day/2023-09-01/2023-10-03?adjusted=true&sort=asc&limit=120';
+          
+          // const params = {
+          //   adjusted: true,
+          //   sort: 'asc',
+          //   limit: 120,
+          //   apiKey: apiKey,
+          // };
+          
+          // axios.get(apiUrl, { params })
+          //   .then((response) => {
+          //     console.log(response.data);
+          //   })
+          //   .catch((error) => {
+          //     console.error('Error:', error);
+          //   });
+
+
+        //  const token = new web3.eth.Contract(IERC20.abi,contract)
+        //  const  symbol = await token.methods.symbol().call()
+
+        //  console.log(symbol,'symen')
+
+          // const apiKey = '8ABCABED-3CBC-4810-8DD0-EBA27C71B1DF';
+          // // 'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_LINK_USD/latest?period_id=1MIN'
+    
+          // axios.get("https://rest.coinapi.io/v1/symbols/BINANCE", {
+          //   headers: {
+          //     'X-CoinAPI-Key': apiKey
+          //   }
+          // })
+          // .then((response) => {
+          //   console.log("Ressss")
+          //   console.log(response.data);
+          //   console.log(response.data.find((data)=>data?.asset_id_base ==symbol),"hhhh");
+          // })
+          // .catch((error) => {
+          //   console.error('Error:', error);
+          // });
+         
+        //   const apiKey = '8ABCABED-3CBC-4810-8DD0-EBA27C71B1DF';
+        //   // 'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_LINK_USD/latest?period_id=1MIN'
+        // //  https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_BTC_USD/history?period_id=1MIN&time_start=2023-10-01T00:00:00 \
+  
+         
+        //   axios.get(` https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_BTC_USD/history?period_id=1MIN&time_start=2023-10-01T00:00:00`, {
+        //     headers: {
+        //       'X-CoinAPI-Key': apiKey
+        //     }
+        //   })
+        //   .then((response) => {
+        //     console.log("Ressss")
+        //     console.log(response.data);
+         
+        //   })
+        //   .catch((error) => {
+        //     console.error('Error:', error);
+        //   });
+  
 
        
        }catch(e){
@@ -644,6 +711,10 @@ exports.getChartByContractAddress= async (req, res, next) => {
     //           }
     //       });
 
+    const currentTimestampInSeconds = Math.floor(Date.now() / 1000);
+
+    console.log(currentTimestampInSeconds)
+
         const opt = {
           method: 'GET',
           url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
@@ -660,7 +731,7 @@ exports.getChartByContractAddress= async (req, res, next) => {
 
         const options = {
           method: 'GET',
-          url: `https://api.dev.dex.guru/v1/tradingview/history?symbol=${contract}-eth_USD&resolution=1D&from=1691072145&to=1691676945`,
+          url: `https://api.dev.dex.guru/v1/tradingview/history?symbol=${contract}-eth_USD&resolution=1D&from=1691072145&to=${currentTimestampInSeconds}`,
           headers: {
             accept: 'application/json',
             'api-key': '0lq_Ywi6cWjxousqQ5C7j5Iffeq_8sDbhHhqxsl2Iho'

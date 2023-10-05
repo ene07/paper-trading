@@ -3,7 +3,7 @@ const express = require('express');
 
 
 const {signUp,login}=require("../controllers/authController")
-const {saveTrade,getPairs,getTransactions,leaderBoard,getUserPortfolio,getUserProfile,deposit,getCharts,getChartByContractAddress} = require('../controllers/transactionController');
+const {saveTrade,getPairs,getTransactions,leaderBoard,getUserPortfolio,getUserProfile,deposit,getCharts,getChartByContractAddress,getTokenDetails} = require('../controllers/transactionController');
 
 
 
@@ -19,6 +19,7 @@ router.route('/portfolio').post(getUserPortfolio);
 router.route('/profile').post(getUserProfile);
 router.route('/deposit').post(deposit);
 router.route('/chart').post(getCharts);
+router.route('/details').get(getTokenDetails);
 router.route('/chart-contractaddress').post(getChartByContractAddress);
 // router.route('/verify').post(verify);
 
