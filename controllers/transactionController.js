@@ -94,6 +94,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
         };
         
           const response=   await axios.request(options)
+          const newbalUsd= 1642.31 * Number(amount)
         
           const data= response.data.data[response.data.total-1] 
           console.log(data,"datat")
@@ -104,9 +105,11 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           const db=admin.firestore();
            const userRef = db.collection('users').doc(uid)
            const doc = await userRef.get();
-           console.log(doc.data(),"docoo")
+           console.log(doc.data().balance > amount,"docoo")
 
 
+
+             
            if( doc.data()?.balance < amount) {
               throw new Error(" You dont have enough paper ETH to trade ")
 
@@ -180,12 +183,12 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                   if(doc.data()?.tradedPairs?.includes(assetId)){
                           if(doc.data()?.premium){
 
-                        
+                          
                                ( db.collection("users").doc(uid)).update({
                                   trades:Number(doc.data()?.trades) + 1,
                                   isEligible:true,
                                   balance:Number(doc.data()?.trades) - amount,
-                                  balanceUsd:Number(doc.data()?.balanceUsd) 
+                                  balanceUsd:Number(doc.data()?.balanceUsd) -newbalUsd
                 
                                 })
                               }else{
@@ -193,6 +196,9 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                                        ( db.collection("users").doc(uid)).update({
                                          trades:Number(doc.data()?.trades) + 1,
                                          isEligible:false,
+                                         balance:Number(doc.data()?.trades) - amount,
+                                         balanceUsd:Number(doc.data()?.balanceUsd) -newbalUsd
+                       
                       
                                       })
 
@@ -202,7 +208,11 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                                   }else{
                                      ( db.collection("users").doc(uid)).update({
                                        trades:Number(doc.data()?.trades) + 1,
-                                       freeTx:Number(doc.data()?.freeTx) -1
+                                       freeTx:Number(doc.data()?.freeTx) -1,
+                                       balance:Number(doc.data()?.trades) - amount,
+                                       balanceUsd:Number(doc.data()?.balanceUsd) -newbalUsd
+                     
+                    
                       
                                     })
 
@@ -214,7 +224,9 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
                       
                           ( db.collection("users").doc(uid)).update({
                           trades:Number(doc.data()?.trades) + 1,
-                          tradedPairs:[...doc.data()?.tradedPairs,assetId]
+                          tradedPairs:[...doc.data()?.tradedPairs,assetId],
+                          balance:Number(doc.data()?.trades) - amount,
+                          balanceUsd:Number(doc.data()?.balanceUsd) -newbalUsd
                           })
       
                         }
@@ -510,7 +522,7 @@ exports.deposit= async (req, res, next) => {
 
     const amountUsd=Number(priceusd.data["ethereum"].usd) * deposit
      const usdbalance= doc?.data()?.balanceUsd===undefined? 0:doc?.data()?.balanceUsd
-    db.collection('users').doc(uid).update(
+     db.collection('users').doc(uid).update(
          { 
            balance:deposit + doc?.data()?.balance,
            balanceUsd:amountUsd + usdbalance,
