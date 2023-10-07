@@ -775,11 +775,20 @@ exports.getChartByContractAddress= async (req, res, next) => {
            try{
 
               const resp = await axios({
-                url: ` https://api.coingecko.com/api/v3/search?query=${inventory.data["name"]}`,
+                url: ` https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en`,
                 method: 'get'
               })
-               const token= resp.data.coins?.find((coin)=>coin.symbol===inventory.data["symbol"])
-               data["img"]=token.thumb
+              console.log(resp.data,"resppp")
+              const symbol=inventory.data["symbol"]
+              console.log(symbol.toLowerCase(),"symbol")
+               const token= resp.data.find((coin)=>coin.symbol===symbol.toLowerCase())
+               console.log(token,"tokenn")
+               data["img"]=token.image
+               data["market_cap"]=token.market_cap
+               data["total_volume"]=token.total_volume
+               data["total_supply"]=token.total_supply
+               data["change_percentage_today"]=token.price_change_percentage_24h
+               data["all_high_24h"]=token.high_24h
           }catch(e){
           console.log(e)
           }
