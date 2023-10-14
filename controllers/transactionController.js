@@ -6,10 +6,10 @@ const axios = require('axios')
 // const wss="https://eth-mainnet.g.alchemy.com/v2/-dsGUE0osTIPnOyCSZjHdOK_HWdxb85U"
 // const web3 = new Web3(wss)
 
+
+
 const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchPrice') 
-
-
-      const tokens=[
+     const tokens=[
         {
           "symbol": "usdc",
           "img": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
@@ -85,12 +85,12 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
       console.log(timestamp,"time")
       try{
         const options = {
-          method: 'GET',
-          url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
-          headers: {
-            accept: 'application/json',
+           method: 'GET',
+           url: `https://api.dev.dex.guru/v1/chain/1/tokens/${contract}/market/history?begin_timestamp=1588723228`,
+           headers: {
+             accept: 'application/json',
             'api-key': 'jVWBkdwJXDo9H-n7fyGcM9z5Bu-h98XrkxKxPzkcX0c'
-          }
+           }
         };
         
           const response=   await axios.request(options)
@@ -119,7 +119,7 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
              throw new Error(" You exceed your transaction limit of 7")
            }else{
                 
-                const result =await retrieveLatestEthPrice(assetId)
+                // const result =await retrieveLatestEthPrice(assetId)
                 
                 // const price= result?.data[assetId]?.eth
                 const amountOut=Number(amount) / Number(priceEth)
