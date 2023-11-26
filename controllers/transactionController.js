@@ -215,6 +215,74 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           "id": "maker",
           "contract": "0x4e15361fd6b4bb609fa63c81a2be19d873717870"
         },
+        {
+          "symbol": "stETH",
+          "img": "https://etherscan.io/token/images/lido-steth_32.png",
+          "price": 1316.88,
+          "name": "stETH",
+          "id": "maker",
+          "contract": "0xae7ab96520de3a18e5e111b5eaab095312d7fe84"
+        },
+        {
+          "symbol": "TONCOIN",
+          "img": "https://etherscan.io/token/images/theopennetwork_32.png",
+          "price": 1316.88,
+          "name": "Wrapped TON Coin",
+          "id": "maker",
+          "contract": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1"
+        },
+        {
+          "symbol": "LEO",
+          "img": "https://etherscan.io/token/images/leo_28_2.png",
+          "price": 1316.88,
+          "name": "Bitfinex LEO Token ",
+          "id": "maker",
+          "contract": "0x2af5d2ad76741191d15dfe7bf6ac92d4bd912ca3"
+        },
+        {
+          "symbol": "TUSD",
+          "img": "https://etherscan.io/token/images/trueusd_32.png?v=2",
+          "price": 1316.88,
+          "name": "TrueUSD ",
+          "id": "maker",
+          "contract": "0x0000000000085d4780B73119b644AE5ecd22b376"
+        },
+        {
+          "symbol": "CRO",
+          "img": "https://etherscan.io/token/images/cronoseth_32.png",
+          "price": 1316.88,
+          "name": "Cronos Coin",
+          "id": "maker",
+          "contract": "0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b"
+        },
+        {
+          "symbol": "LDO",
+          "img": "https://etherscan.io/token/images/lido-dao_32.png",
+          "price": 1316.88,
+          "name": "Lido DAO Token ",
+          "id": "maker",
+          "contract": "0x5a98fcbea516cf06857215779fd812ca3bef1b32"
+        },
+        {
+          "symbol": "IMX",
+          "img": "https://etherscan.io/token/images/immutable_32.png",
+          "price": 1316.88,
+          "name": "Immutable X ",
+          "id": "maker",
+          "contract": "0xf57e7e7c23978c3caec3c3548e3d615c346e79ff"
+        },
+        {
+          "symbol": "IMX",
+          "img": "https://etherscan.io/token/images/immutable_32.png",
+          "price": 1316.88,
+          "name": "Immutable X ",
+          "id": "maker",
+          "contract": "0xf57e7e7c23978c3caec3c3548e3d615c346e79ff"
+        },
+
+
+
+
     
     
     
