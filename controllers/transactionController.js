@@ -71,6 +71,158 @@ const {retrieveLatestEthPrice,retrieveLatestUsdPrice }= require('../utils/fetchP
           "id": "maker",
           "contract": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2"
         },
+        {
+          "symbol": "okb",
+          "img": "https://assets.coingecko.com/coins/images/1364/large/Mark_Maker.png?1585191826",
+          "price": 1316.88,
+          "name": "OKB",
+          "id": "maker",
+          "contract": "0x75231F58b43240C9718Dd58B4967c5114342a86c"
+        },
+        {
+          "symbol": "grt",
+          "img": "https://etherscan.io/token/images/TheGraph_32.png",
+          "price": 1316.88,
+          "name": "Graph Token",
+          "id": "maker",
+          "contract": "0xc944e90c64b2c07662a292be6244bdf05cda44a7"
+        },
+        {
+          "symbol": "rndr",
+          "img": "https://etherscan.io/token/images/Render2_32.png",
+          "price": 1316.88,
+          "name": "Render Token",
+          "id": "maker",
+          "contract": "0x6de037ef9ad2725eb40118bb1702ebb27e4aeb24"
+        },
+        {
+          "symbol": "THETA",
+          "img": "https://etherscan.io/token/images/theta_28.png",
+          "price": 1316.88,
+          "name": "Theta Token",
+          "id": "maker",
+          "contract": "0x3883f5e181fccaf8410fa61e12b59bad963fb645"
+        },
+        {
+          "symbol": "hex",
+          "img": "https://etherscan.io/token/images/theta_28.png",
+          "price": 1316.88,
+          "name": "HEX",
+          "id": "maker",
+          "contract": "0x2b591e99afe9f32eaa6214f7b7629768c40eeb39"
+        },
+        {
+          "symbol": "kcs",
+          "img": "https://etherscan.io/token/images/kucointoken_32.png",
+          "price": 1316.88,
+          "name": "KuCoin Token",
+          "id": "maker",
+          "contract": "0xf34960d9d60be18cc1d5afc1a6f012a723a28811"
+        },
+        {
+          "symbol": "usdd",
+          "img": "https://etherscan.io/token/images/usdd-tron_32.png",
+          "price": 1316.88,
+          "name": "Decentralizes USD",
+          "id": "maker",
+          "contract": "0x0C10bF8FcB7Bf5412187A595ab97a3609160b5c6"
+        },
+        {
+          "symbol": "frax",
+          "img": "https://etherscan.io/token/images/usdd-tron_32.png",
+          "price": 1316.88,
+          "name": "Frax",
+          "id": "maker",
+          "contract": "0x853d955acef822db058eb8505911ed77f175b99e"
+        },
+        {
+          "symbol": "frax",
+          "img": "https://etherscan.io/token/images/usdd-tron_32.png",
+          "price": 1316.88,
+          "name": "Frax",
+          "id": "maker",
+          "contract": "0x853d955acef822db058eb8505911ed77f175b99e"
+        },
+        {
+          "symbol": "dydx",
+          "img": "https://etherscan.io/token/images/dydx2_32.png",
+          "price": 1316.88,
+          "name": "dydx",
+          "id": "maker",
+          "contract": "0x92d6c1e31e14520e676a687f0a93788b716beff5"
+        },
+        {
+          "symbol": "ape",
+          "img": "https://etherscan.io/token/images/apecoin_32.png",
+          "price": 1316.88,
+          "name": "Apecoin",
+          "id": "maker",
+          "contract": "0x4d224452801aced8b2f0aebe155379bb5d594381"
+        },
+        {
+          "symbol": "cake",
+          "img": "https://etherscan.io/token/images/pancake_32.png?v=2",
+          "price": 1316.88,
+          "name": "PancakeSwap Token ",
+          "id": "maker",
+          "contract": "0x152649eA73beAb28c5b49B26eb48f7EAD6d4c898"
+        },
+        {
+          "symbol": "rpl",
+          "img": "https://etherscan.io/token/images/Rocketpool_32.png",
+          "price": 1316.88,
+          "name": " Rocket Pool ",
+          "id": "maker",
+          "contract": "0xd33526068d116ce69f19a9ee46f0bd304f21a51f"
+        },
+        {
+          "symbol": "rlb",
+          "img": "https://etherscan.io/token/images/rollbitcoin_32.png",
+          "price": 1316.88,
+          "name": " Rollbit Coin ",
+          "id": "maker",
+          "contract": "0x046eee2cc3188071c02bfc1745a6b17c656e3f3d"
+        },
+        {
+          "symbol": "ilv",
+          "img": "https://etherscan.io/token/images/illuvium_32.png",
+          "price": 1316.88,
+          "name": "Illuvium",
+          "id": "maker",
+          "contract": "0x767fe9edc9e0df98e07454847909b5e959d7ca0e"
+        },
+        {
+          "symbol": "fet",
+          "img": "https://etherscan.io/token/images/fetch_32.png?v=2",
+          "price": 1316.88,
+          "name": "Illuvium",
+          "id": "maker",
+          "contract": "0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85"
+        },
+        {
+          "symbol": "sand",
+          "img": "https://etherscan.io/token/images/sand_32.png",
+          "price": 1316.88,
+          "name": "SAND",
+          "id": "maker",
+          "contract": "0x3845badAde8e6dFF049820680d1F14bD3903a5d0"
+        },
+        {
+          "symbol": "ftm",
+          "img": "https://etherscan.io/token/images/fantomtoken_32.png",
+          "price": 1316.88,
+          "name": "Fantom token",
+          "id": "maker",
+          "contract": "0x4e15361fd6b4bb609fa63c81a2be19d873717870"
+        },
+    
+    
+    
+    
+    
+
+    
+
     
         ]
 
